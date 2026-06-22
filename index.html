@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>九数云 · 智能分析（100% 保真还原）</title>
@@ -1967,7 +1966,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 .feedback-modal {
   position: relative;
   width: 640px;
-  height: 403px;
+  height: 352px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1985,7 +1984,6 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   align-items: center;
   justify-content: space-between;
   padding: var(--fd-padding-layout-sm) var(--fd-padding-layout-lg);
-  border-bottom: 1px solid var(--color-border-secondary);
 }
 .feedback-modal-title {
   color: var(--color-text);
@@ -1993,18 +1991,6 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   line-height: var(--fd-line-height-xl);
   font-weight: 600;
 }
-.feedback-modal-close {
-  width: var(--fd-control-height-sm);
-  height: var(--fd-control-height-sm);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--fd-border-radius);
-  color: var(--color-icon-normal);
-  font-size: 24px;
-  line-height: 1;
-}
-.feedback-modal-close:hover { background: var(--color-bg-text-normal-hover); color: var(--color-icon-hover); }
 .feedback-close-confirm {
   position: absolute;
   top: 48px;
@@ -2030,21 +2016,20 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   background: var(--color-bg-container);
   font-size: var(--fd-font-size);
 }
-.feedback-close-confirm .is-primary { border-color: var(--color-primary); color: var(--color-text-white); background: var(--color-primary); }
+.feedback-close-confirm .is-primary { border-color: #0F6BFF; color: var(--color-text-white); background: #0F6BFF; }
 .feedback-modal-body {
   flex: 1;
   min-height: 0;
-  padding: var(--fd-gap-lg) var(--fd-gap-3xl);
+  padding: 0 20px;
 }
 .feedback-context {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: inline-flex;
+  align-items: center;
 }
 .feedback-check-line {
   display: inline-flex;
-  align-items: flex-start;
-  gap: var(--fd-gap-sm);
+  align-items: center;
+  gap: 6px;
   height: 22px;
   color: var(--color-text);
   font-size: var(--fd-font-size);
@@ -2053,22 +2038,50 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 .feedback-context input {
   width: 16px;
   height: 16px;
-  margin: 3px 0 0;
-  accent-color: var(--color-primary);
+  margin: 0;
+  accent-color: #0F6BFF;
 }
-.feedback-context-desc {
-  padding-left: var(--fd-gap-3xl);
-  color: var(--color-text-quaternary);
+.feedback-info {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-icon-normal);
+  border-radius: 50%;
+  color: var(--color-icon-normal);
+  font-size: var(--fd-font-size-sm);
+  line-height: 14px;
+  cursor: default;
+}
+.feedback-info::after { content: "i"; transform: scale(.85); }
+.feedback-info-tip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 5;
+  width: 298px;
+  display: none;
+  padding: 8px 10px;
+  border-radius: var(--fd-border-radius);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--fd-box-shadow-secondary);
   font-size: var(--fd-font-size-sm);
   line-height: var(--fd-line-height-sm);
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
 }
+.feedback-info:hover .feedback-info-tip { display: block; }
 .feedback-editor {
   position: relative;
-  margin-top: var(--fd-gap-lg);
+  margin-top: 12px;
 }
 .feedback-editor textarea {
   width: 100%;
-  height: 198px;
+  height: 185px;
   padding: 6px 8px;
   border: 1px solid var(--color-border);
   border-radius: var(--fd-border-radius);
@@ -2080,7 +2093,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   line-height: var(--fd-line-height);
 }
 .feedback-editor textarea::placeholder { color: var(--color-text-quaternary); }
-.feedback-editor textarea:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px var(--color-control-outline); }
+.feedback-editor textarea:focus { border-color: #0F6BFF; box-shadow: 0 0 0 2px rgba(15, 107, 255, .16); }
 .feedback-suggestion {
   position: absolute;
   top: 6px;
@@ -2119,27 +2132,35 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 }
 @keyframes feedback-spin { to { transform: rotate(360deg); } }
 .feedback-modal-foot {
-  height: 57px;
-  flex: 0 0 57px;
+  height: 52px;
+  flex: 0 0 52px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: 8px;
   padding: var(--fd-padding-layout-sm) var(--fd-padding-layout-lg);
-  border-top: 1px solid var(--color-border-secondary);
 }
+.feedback-secondary,
 .feedback-submit {
   height: var(--fd-control-height);
   padding: 0 var(--fd-padding-layout-sm);
   border-radius: var(--fd-border-radius);
-  color: var(--color-text-white);
-  background: var(--color-primary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-bg-container);
   font-size: var(--fd-font-size);
   line-height: var(--fd-line-height);
 }
-.feedback-submit:hover { background: var(--color-primary-hover); }
+.feedback-submit {
+  border-color: #0F6BFF;
+  color: var(--color-text-white);
+  background: #0F6BFF;
+}
+.feedback-submit:hover { background: #0057D9; }
 .feedback-submit:disabled {
   color: var(--color-text-quaternary);
   background: var(--color-fill-tertiary);
+  border-color: var(--color-border);
   cursor: not-allowed;
 }
 
@@ -2628,7 +2649,6 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   <div class="feedback-modal">
     <header class="feedback-modal-head">
       <div class="feedback-modal-title" id="feedbackTitle">你觉得什么让你不满意？</div>
-      <button class="feedback-modal-close" id="feedbackClose" type="button" aria-label="关闭">×</button>
       <div class="feedback-close-confirm" id="feedbackCloseConfirm">
         <div class="feedback-close-confirm-text">关闭弹窗后，已输入内容不保留，确认关闭？</div>
         <div class="feedback-close-confirm-actions">
@@ -2641,9 +2661,11 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
       <label class="feedback-context">
         <span class="feedback-check-line">
           <input id="feedbackContext" type="checkbox" checked />
-          <span>附带最近消息</span>
+          <span>附带会话消息</span>
+          <span class="feedback-info" aria-label="说明">
+            <span class="feedback-info-tip">提交时将附带当前会话消息记录，仅用于帮助我们了解具体情况，改进功能体验</span>
+          </span>
         </span>
-        <span class="feedback-context-desc">你的消息将仅用于帮助我们了解具体情况，更好的改善功能体验</span>
       </label>
       <div class="feedback-editor">
         <textarea id="feedbackInput"></textarea>
@@ -2654,6 +2676,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
       </div>
     </div>
     <footer class="feedback-modal-foot">
+      <button class="feedback-secondary" type="button">取消</button>
       <button class="feedback-submit" type="button">提交</button>
     </footer>
   </div>
@@ -3002,7 +3025,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   const feedbackContext = document.querySelector('#feedbackContext');
   const feedbackSuggestion = document.querySelector('#feedbackSuggestion');
   const feedbackSuggestionText = document.querySelector('#feedbackSuggestionText');
-  const feedbackClose = document.querySelector('#feedbackClose');
+  const feedbackSecondary = document.querySelector('.feedback-secondary');
   const feedbackSubmit = document.querySelector('.feedback-submit');
   const feedbackCloseConfirm = document.querySelector('#feedbackCloseConfirm');
   const feedbackCloseCancel = document.querySelector('#feedbackCloseCancel');
@@ -3049,6 +3072,17 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
     }
     feedbackHide();
   }
+  function feedbackCancelFromFooter() {
+    const isChatFeedback = !activeFeedbackTrigger;
+    if (activeFeedbackTrigger) {
+      activeFeedbackTrigger.classList.add('is-submitted');
+      activeFeedbackTrigger.innerHTML = '🎉 已反馈';
+    }
+    feedbackHide();
+    if (isChatFeedback) {
+      appendAiMessage('已取消反馈。');
+    }
+  }
   function feedbackShowToast(message) {
     feedbackToast.textContent = message;
     feedbackToast.classList.add('is-show');
@@ -3069,7 +3103,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
       return;
     }
     feedbackSuggestionLoading = true;
-    feedbackSuggestionText.textContent = 'AI 正在结合最近消息生成建议…';
+    feedbackSuggestionText.textContent = 'AI 正在结合会话消息生成建议';
     feedbackSyncSuggestion();
     feedbackLoadingTimer = setTimeout(() => {
       feedbackSuggestionLoading = false;
@@ -3081,6 +3115,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
     feedbackMode = mode === 'rating' ? 'rating' : 'voice';
     activeFeedbackTrigger = trigger;
     feedbackTitle.textContent = mode === 'rating' ? '你觉得什么让你不满意？' : '反馈';
+    feedbackSecondary.textContent = mode === 'rating' ? '跳过' : '取消';
     feedbackContext.checked = true;
     feedbackInput.value = '';
     feedbackSuggestionText.textContent = feedbackSuggestionValue;
@@ -3102,8 +3137,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
     feedbackInput.focus();
     feedbackInput.setSelectionRange(feedbackInput.value.length, feedbackInput.value.length);
   }
-  feedbackClose.addEventListener('click', feedbackRequestClose);
-  feedbackMask.addEventListener('click', feedbackRequestClose);
+  feedbackSecondary.addEventListener('click', feedbackCancelFromFooter);
   feedbackCloseCancel.addEventListener('click', () => feedbackCloseConfirm.classList.remove('is-show'));
   feedbackCloseConfirmOk.addEventListener('click', feedbackHide);
   feedbackSubmit.addEventListener('click', () => {
