@@ -2055,7 +2055,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   line-height: 14px;
   cursor: default;
 }
-.feedback-info::after { content: "i"; transform: scale(.85); }
+.feedback-info::after { content: "?"; transform: scale(.85); }
 .feedback-info-tip {
   position: absolute;
   top: calc(100% + 8px);
@@ -2073,6 +2073,17 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   text-align: left;
   white-space: normal;
   pointer-events: none;
+}
+.feedback-info-tip::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 14px;
+  width: 10px;
+  height: 10px;
+  background: var(--color-bg-elevated);
+  transform: rotate(45deg);
+  box-shadow: -2px -2px 4px rgba(31, 35, 41, .04);
 }
 .feedback-info:hover .feedback-info-tip { display: block; }
 .feedback-editor {
