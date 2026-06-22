@@ -1991,32 +1991,24 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   line-height: var(--fd-line-height-xl);
   font-weight: 600;
 }
-.feedback-close-confirm {
-  position: absolute;
-  top: 48px;
-  right: 12px;
-  z-index: 4;
-  width: 256px;
-  display: none;
-  padding: 16px;
-  border: 1px solid var(--color-border-secondary);
-  border-radius: var(--fd-border-radius-lg);
-  background: var(--color-bg-container);
-  box-shadow: var(--fd-box-shadow-secondary);
-}
-.feedback-close-confirm.is-show { display: block; }
-.feedback-close-confirm-text { margin-bottom: 14px; color: var(--color-text); font-size: 14px; line-height: 22px; }
-.feedback-close-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
-.feedback-close-confirm button {
-  height: var(--fd-control-height);
-  padding: 0 var(--fd-padding-layout-sm);
-  border: 1px solid var(--color-border);
+.feedback-close {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
   border-radius: var(--fd-border-radius);
-  color: var(--color-text);
-  background: var(--color-bg-container);
-  font-size: var(--fd-font-size);
+  color: var(--color-icon-normal);
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
 }
-.feedback-close-confirm .is-primary { border-color: #0F6BFF; color: var(--color-text-white); background: #0F6BFF; }
+.feedback-close:hover {
+  color: var(--color-text);
+  background: var(--color-fill-quaternary);
+}
 .feedback-modal-body {
   flex: 1;
   min-height: 0;
@@ -2151,6 +2143,9 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   gap: 8px;
   padding: var(--fd-padding-layout-sm) var(--fd-padding-layout-lg);
 }
+.feedback-modal-foot.is-rating {
+  justify-content: space-between;
+}
 .feedback-secondary,
 .feedback-submit {
   height: var(--fd-control-height);
@@ -2173,6 +2168,21 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   background: var(--color-fill-tertiary);
   border-color: var(--color-border);
   cursor: not-allowed;
+}
+.feedback-secondary.is-text {
+  height: auto;
+  padding: 0;
+  border: 0;
+  color: var(--color-text-secondary);
+  background: transparent;
+  box-shadow: none;
+}
+.feedback-secondary.is-text:hover {
+  color: var(--color-text);
+  background: transparent;
+}
+.feedback-secondary.is-hidden {
+  display: none;
 }
 
 /* scrollbars */
@@ -2660,13 +2670,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   <div class="feedback-modal">
     <header class="feedback-modal-head">
       <div class="feedback-modal-title" id="feedbackTitle">你觉得什么让你不满意？</div>
-      <div class="feedback-close-confirm" id="feedbackCloseConfirm">
-        <div class="feedback-close-confirm-text">关闭弹窗后，已输入内容不保留，确认关闭？</div>
-        <div class="feedback-close-confirm-actions">
-          <button type="button" id="feedbackCloseCancel">取消</button>
-          <button class="is-primary" type="button" id="feedbackCloseConfirmOk">确定</button>
-        </div>
-      </div>
+      <button class="feedback-close" id="feedbackClose" type="button" aria-label="关闭">×</button>
     </header>
     <div class="feedback-modal-body">
       <label class="feedback-context">
@@ -2686,7 +2690,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
         </div>
       </div>
     </div>
-    <footer class="feedback-modal-foot">
+    <footer class="feedback-modal-foot" id="feedbackFoot">
       <button class="feedback-secondary" type="button">取消</button>
       <button class="feedback-submit" type="button">提交</button>
     </footer>
@@ -3036,11 +3040,10 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   const feedbackContext = document.querySelector('#feedbackContext');
   const feedbackSuggestion = document.querySelector('#feedbackSuggestion');
   const feedbackSuggestionText = document.querySelector('#feedbackSuggestionText');
+  const feedbackFoot = document.querySelector('#feedbackFoot');
   const feedbackSecondary = document.querySelector('.feedback-secondary');
   const feedbackSubmit = document.querySelector('.feedback-submit');
-  const feedbackCloseConfirm = document.querySelector('#feedbackCloseConfirm');
-  const feedbackCloseCancel = document.querySelector('#feedbackCloseCancel');
-  const feedbackCloseConfirmOk = document.querySelector('#feedbackCloseConfirmOk');
+  const feedbackClose = document.querySelector('#feedbackClose');
   const feedbackToast = document.querySelector('#feedbackToast');
   const chatFeedbackInput = document.querySelector('#chatFeedbackInput');
   const chatFeedbackSend = document.querySelector('#chatFeedbackSend');
@@ -3072,16 +3075,15 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   function feedbackHide() {
     feedbackLayer.classList.add('is-hidden');
     feedbackMask.classList.add('is-hidden');
-    feedbackCloseConfirm.classList.remove('is-show');
     clearTimeout(feedbackLoadingTimer);
     feedbackSuggestionLoading = false;
   }
-  function feedbackRequestClose() {
-    if (feedbackInput.value.trim()) {
-      feedbackCloseConfirm.classList.add('is-show');
-      return;
-    }
+  function feedbackCloseFromHeader() {
+    const isChatFeedback = !activeFeedbackTrigger;
     feedbackHide();
+    if (isChatFeedback) {
+      appendAiMessage('已取消反馈。');
+    }
   }
   function feedbackCancelFromFooter() {
     const isChatFeedback = !activeFeedbackTrigger;
@@ -3126,7 +3128,10 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
     feedbackMode = mode === 'rating' ? 'rating' : 'voice';
     activeFeedbackTrigger = trigger;
     feedbackTitle.textContent = mode === 'rating' ? '你觉得什么让你不满意？' : '反馈';
-    feedbackSecondary.textContent = mode === 'rating' ? '跳过' : '取消';
+    feedbackSecondary.textContent = '跳过';
+    feedbackFoot.classList.toggle('is-rating', mode === 'rating');
+    feedbackSecondary.classList.toggle('is-text', mode === 'rating');
+    feedbackSecondary.classList.toggle('is-hidden', mode !== 'rating');
     feedbackContext.checked = true;
     feedbackInput.value = '';
     feedbackSuggestionText.textContent = feedbackSuggestionValue;
@@ -3149,8 +3154,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
     feedbackInput.setSelectionRange(feedbackInput.value.length, feedbackInput.value.length);
   }
   feedbackSecondary.addEventListener('click', feedbackCancelFromFooter);
-  feedbackCloseCancel.addEventListener('click', () => feedbackCloseConfirm.classList.remove('is-show'));
-  feedbackCloseConfirmOk.addEventListener('click', feedbackHide);
+  feedbackClose.addEventListener('click', feedbackCloseFromHeader);
   feedbackSubmit.addEventListener('click', () => {
     if (!feedbackInput.value.trim()) return;
     if (activeFeedbackTrigger) {
