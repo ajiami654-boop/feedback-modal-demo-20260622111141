@@ -2103,35 +2103,41 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   left: 8px;
   right: 8px;
   display: none;
-  align-items: center;
-  gap: 8px;
   color: var(--color-text-quaternary);
   font-size: var(--fd-font-size);
   line-height: var(--fd-line-height);
   pointer-events: none;
+  white-space: normal;
+  word-break: break-word;
 }
-.feedback-suggestion.is-show { display: flex; }
+.feedback-suggestion.is-show { display: block; }
 .feedback-ai-tip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  flex: 0 0 auto;
+  display: inline;
+  margin-right: 4px;
   color: transparent;
   background: linear-gradient(-11deg, #004AE0 20%, #2562FF 42%, #D97EFC 99%);
   -webkit-background-clip: text;
   background-clip: text;
   white-space: nowrap;
 }
-.feedback-suggestion.is-loading .feedback-ai-tip { display: none; }
+.feedback-accept-tip {
+  margin-left: 4px;
+  color: var(--color-text-quaternary);
+  white-space: nowrap;
+}
+.feedback-suggestion.is-loading .feedback-ai-tip,
+.feedback-suggestion.is-loading .feedback-accept-tip { display: none; }
 .feedback-suggestion.is-loading::before {
+  display: inline-block;
   width: 14px;
   height: 14px;
-  flex: 0 0 14px;
+  margin-right: 6px;
   border: 1.5px solid color-mix(in srgb, #6d5df6 28%, transparent);
   border-top-color: #6d5df6;
   border-radius: 50%;
   content: "";
   animation: feedback-spin .8s linear infinite;
+  vertical-align: -2px;
 }
 @keyframes feedback-spin { to { transform: rotate(360deg); } }
 .feedback-modal-foot {
@@ -2685,8 +2691,9 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
       <div class="feedback-editor">
         <textarea id="feedbackInput"></textarea>
         <div class="feedback-suggestion" id="feedbackSuggestion">
+          <span class="feedback-ai-tip">✦ AI 建议：</span>
           <span id="feedbackSuggestionText">当前的仪表板配色不够美观，需要提升视觉效果</span>
-          <span class="feedback-ai-tip">✦ AI 建议，Enter 采用</span>
+          <span class="feedback-accept-tip">（↵ 采用）</span>
         </div>
       </div>
     </div>
